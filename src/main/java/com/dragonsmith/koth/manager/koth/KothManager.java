@@ -127,7 +127,22 @@ public class KothManager implements Listener {
    public CurrentKoth getCurrectKoth() {
       return this.currentKoth;
    }
+   public static Location getNearestKOTH(Location playerLocation) {
+      Koth nearestKoth = null;
+      double nearestDistance = Double.MAX_VALUE;
 
+      // Loop through all the KOTHs and find the nearest one
+      for (Koth koth : KoTHPlugin.getInstance().getKothManager().getKoths()) {
+         double distance = playerLocation.distance(koth.getCenterLocation());
+         if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestKoth = koth;
+         }
+      }
+
+      // Return the location of the nearest KOTH, or null if there is none
+      return nearestKoth != null ? nearestKoth.getCenterLocation() : null;
+   }
    public void setCurrectKoth(Koth koth) {
       if (koth != null) {
          this.currentKoth = new CurrentKoth(koth);
