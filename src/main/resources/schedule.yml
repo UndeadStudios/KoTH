@@ -1,0 +1,33 @@
+options:
+  # List of time zones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  # Timezone example:
+  # timezone: 'America/Argentina/Buenos_Aires'
+  timezone: DEFAULT
+
+  # Minimum players for the koth to start
+  minimum-players: 20
+
+schedule:
+  monday:
+    # Example format:
+    # - 'HOUR:MINUTE KOTH_ID'
+    - '06:00 koth1'
+    - '12:00 koth2'
+
+  tuesday: {}
+
+  wednesday: {}
+
+  thursday: {}
+
+  friday: {}
+
+  saturday: {}
+
+  sunday: {}
+
+
+
+
+
+

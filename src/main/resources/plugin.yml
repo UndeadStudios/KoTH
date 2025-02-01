@@ -1,0 +1,14 @@
+main: com.dragonsmith.koth.KoTHPlugin
+name: KoTH
+api-version: 1.21
+version: 1.0.0
+# Fixed: You can capture the koth while in the respawn menu.
+
+description: 'King of the Hill Upgraded to work with 1.21.4'
+author: DragonSmith
+softdepend: [ PlaceholderAPI ]
+load: POSTWORLD
+commands:
+  koth:
+    description: Koth main command
+    usage: /<command>

@@ -1,0 +1,73 @@
+prefix: '&8[&c&lKoTH&8]&7'
+
+time-left-format: '{minutes}m {seconds}s'
+pos1-selected: '{prefix} Position 1 was selected in &c{world}&7, &c{x}&7, &c{y}&7, &c{z}&7.'
+pos2-selected: '{prefix} Position 2 was selected in &c{world}&7, &c{x}&7, &c{y}&7, &c{z}&7.'
+no-permission: '{prefix} &cYou do not have permissions to do that!'
+
+correct-usage: '{prefix} Correct usage: &c{command}&7.'
+bad-executor: '{prefix} Only players can execute this command.'
+
+koth-started: '{prefix} The koth &c{name} &7has started in &c{world}&7, &c{x}&7, &c{y}&7, &c{z}&7, time left: &c{time_left}&7.'
+
+koth-in-progress:
+  with-king: '{prefix} The koth &c{name} &7(&c{world}&7, &c{x}&7, &c{y}&7, &c{z}&7) is in progress and &c{player} &7is dominating the hill, time left: &c{time_left}&7.'
+  without-king: '{prefix} The koth &c{name} &7(&c{world}&7, &c{x}&7, &c{y}&7, &c{z}&7) is in progress and no one is dominating the hill, time left: &c{time_left}&7.'
+
+koth-finised:
+  with-winner: '{prefix} The koth &c{name} &7has ended, the winner is &c{player}&7!'
+  without-winner: '{prefix} The koth &c{name} &7has ended without a winner'
+
+commands:
+  koth:
+    help:
+      - '&c&lKoTH &8>> &7Command List:'
+      - '&c/koth givewand &8- &7Gives you the wand to select positions'
+      - '&c/koth create <id> <display_name> &8- &7Create a koth'
+      - '&c/koth delete <id> &8- &7Delete a koth'
+      - '&c/koth tp <id> &8- &7Teleports you to a koth'
+      - '&c/koth list &8- &7Show the koth list'
+      - '&c/koth start <id>&8- &7Start a koth'
+      - '&c/koth stop &8- &7Stop a koth'
+      - '&c/koth reward create <id> <item/command> <chances> [<your command>] &8- &7Create a reward'
+      - '&c/koth reward delete <id> &8- &7Delete a reward'
+      - '&c/koth reward list &8- &7Show the rewards list'
+      - '&c/koth reload &8- &7Reload the configuration'
+    givewand:
+      gived: '{prefix} You received the selection wand.'
+    create:
+      invalid-pos: '{prefix} Position 1 or 2 is invalid.'
+      already-exist: '{prefix} The koth with id &c{id}&7 already exists.'
+      koth-created: '{prefix} The koth &c{name} &7(&c{id}&7) was created successfully.'
+    delete:
+      invalid-koth: '{prefix} The koth &c{id} &7does not exist.'
+      deleted: '{prefix} The koth &c{name} &7(&c{id}&7) was successfully removed.'
+    tp:
+      invalid-koth: '{prefix} The koth &c{id} &7does not exist.'
+      teleported: '{prefix} You were teleported to the koth &c{name} &7(&c{id}&7).'
+    list:
+      no-koths-found: '{prefix} There is no koth available'
+      koth-display: '{prefix} &c{id} &7> &c{name} &7- &c{pos1} &7- &c{pos2}&7.'
+    start:
+      invalid-koth: '{prefix} The koth &c{id} &7does not exist.'
+      koth-in-progress: '{prefix} A koth is already in progress, wait for it to finish or use &c/koth stop&7.'
+      koth-started: '{prefix} You started the koth &c{name}&7.'
+    stop:
+      no-koth-in-progress: '{prefix} There are no koth in progress.'
+      koth-stopped: '{prefix} Koth &c{name} &7stopped successfully.'
+    reward:
+      create:
+        invalid-item: '{prefix} You do not have any item in hand.'
+        invalid-chance: '{prefix} The chance is invalid, make sure it is a number between 1 and 100.'
+        already-exist: '{prefix} There is already a reward with the id &c{id}&7.'
+        reward-created: '{prefix} You created the reward &c{id} &7successfully.'
+      delete:
+        invalid-reward: '{prefix} The reward &c{id} &7does not exist.'
+        reward-deleted: '{prefix} Reward &c{id} &7was successfully removed.'
+      list:
+        item-display: '{prefix} &c{id} &7> &c{chances}% &7- &c{item_type} &7- &c{item_name}&7.'
+        command-display: '{prefix} &c{id} &7> &c{chances}% &7- &c{command}&7-'
+        no-rewards-found: '{prefix} There is no rewards available.'
+    reload:
+      reloaded: '{prefix} The configuration was reloaded.'
+
