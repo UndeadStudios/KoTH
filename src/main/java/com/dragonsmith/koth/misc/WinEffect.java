@@ -9,6 +9,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class WinEffect {
@@ -19,11 +20,32 @@ public class WinEffect {
          public void run() {
             World world = player.getWorld();
             Location location = player.getLocation();
-            Firework firework = (Firework)world.spawnEntity(location, EntityType.FIREWORK_ROCKET);
+            Firework firework = (Firework) world.spawnEntity(location, EntityType.FIREWORK_ROCKET);
             FireworkMeta fireworkMeta = firework.getFireworkMeta();
             fireworkMeta.setPower(1);
-            fireworkMeta.addEffect(FireworkEffect.builder().withColor(new Color[]{Color.RED, Color.WHITE}).trail(true).flicker(false).build());
+
+            // Add non-explosive, non-damaging effect (just a visual trail)
+            fireworkMeta.addEffect(FireworkEffect.builder()
+                    .withColor(new Color[]{Color.RED, Color.WHITE})
+                    .trail(true)
+                    .flicker(false)
+                    .with(FireworkEffect.Type.BALL) // Non-explosive type
+                    .build());
+
             firework.setFireworkMeta(fireworkMeta);
+
+            // Make sure the firework is silent
+            firework.setSilent(true);
+
+            // Set the firework to not explode (no explosion or damage)
+            firework.setMetadata("no_damage", new FixedMetadataValue(KoTHPlugin.getInstance(), true));
+
+            // Ensure the firework doesn't cause any damage indirectly
+            firework.setCustomName("NoDamageFirework");
+
+            // Also ensure that fireworks can't collide with players and cause any harm
+            firework.setGravity(false);
+
             ++this.cycles;
             if (this.cycles >= 10) {
                this.cancel();
@@ -31,4 +53,7 @@ public class WinEffect {
          }
       }).runTaskTimer(KoTHPlugin.getInstance(), 0L, 10L);
    }
+
+
+
 }

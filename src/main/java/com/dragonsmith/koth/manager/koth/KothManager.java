@@ -12,8 +12,15 @@ import com.dragonsmith.koth.playeable.CurrentKoth;
 import com.dragonsmith.koth.util.Config;
 import com.dragonsmith.koth.util.Util;
 import com.dragonsmith.koth.util.YMLFile;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -101,18 +108,54 @@ public class KothManager implements Listener {
    }
 
    public void create(KothBuilder builder) {
+      // Load and update KOTH configuration
       YMLFile kothsFile = Config.getKothsFile();
       kothsFile.loadFile();
       FileConfiguration kothsConfiguration = kothsFile.get();
+
       String id = builder.getId();
       String name = builder.getName();
       Location pos1 = builder.getPos1();
       Location pos2 = builder.getPos2();
+
+      // Save KOTH info
       kothsConfiguration.set(id + ".name", name);
       kothsFile.save();
       Util.saveLocationToConfig(kothsFile, id + ".pos1", pos1);
       Util.saveLocationToConfig(kothsFile, id + ".pos2", pos2);
+
       this.koths.put(id, new Koth(id, name, pos1, pos2));
+
+      // Get world from pos1 (assuming pos1 and pos2 are in the same world)
+      World world = pos1.getWorld();
+
+      // Get WorldGuard Region Manager
+      RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+      RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
+
+      if (regionManager == null) {
+         System.out.println("Could not get the RegionManager for world: " + world.getName());
+         return;
+      }
+
+      // Expand pos1 and pos2 by 300 blocks in all directions
+      int minX = Math.min(pos1.getBlockX(), pos2.getBlockX()) - 300;
+      int minY = -64;
+      int minZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ()) - 300;
+
+      int maxX = Math.max(pos1.getBlockX(), pos2.getBlockX()) + 300;
+      int maxY = 320;
+      int maxZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ()) + 300;
+
+      // Convert to WorldEdit Vectors
+      BlockVector3 min = BlockVector3.at(minX, minY, minZ);
+      BlockVector3 max = BlockVector3.at(maxX, maxY, maxZ);
+
+      // Create the WorldGuard region with expanded size
+      ProtectedCuboidRegion region = new ProtectedCuboidRegion(name, min, max);
+      regionManager.addRegion(region);
+
+      System.out.println("Created expanded WorldGuard region '" + name + "' from " + min + " to " + max);
    }
 
    public void delete(String id) {
